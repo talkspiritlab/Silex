@@ -11,8 +11,8 @@
 
 namespace Silex\Tests;
 
-use Fig\Link\GenericLinkProvider;
-use Fig\Link\Link;
+use Symfony\Component\WebLink\GenericLinkProvider;
+use Symfony\Component\WebLink\Link;
 use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Silex\ControllerCollection;
