@@ -11,7 +11,7 @@
 
 namespace Silex\Tests\Provider;
 
-use Fig\Link\Link;
+use Symfony\Component\WebLink\Link;
 use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Silex\Provider\CsrfServiceProvider;
