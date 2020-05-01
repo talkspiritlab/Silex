@@ -1,0 +1,32 @@
+---
+version: 2.0
+
+defaults: &defaults
+  working_directory: ~/silex
+  docker:
+    - image: talkspirit/backendenv:7.2.5
+      environment:
+       - SYMFONY_DEPRECATIONS_HELPER: weak
+       - SYMFONY_PHPUNIT_DIR: $HOME/.symfony-phpunit
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: dependencies
+          command: |
+            #phpenv config-rm xdebug.ini
+            composer update --no-suggest
+            ./vendor/bin/simple-phpunit install
+      - run:
+          name: Execute tests
+          command: |
+            ./vendor/bin/simple-phpunit
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - build
