@@ -11,10 +11,10 @@
 
 namespace Silex\Tests\Provider;
 
-use PHPUnit\Framework\TestCase;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Silex\Provider\MonologServiceProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -30,7 +30,7 @@ class MonologServiceProviderTest extends TestCase
 {
     private $currErrorHandler;
 
-    protected function setUp()
+    protected function setUp():void
     {
         $this->currErrorHandler = set_error_handler('var_dump');
         restore_error_handler();

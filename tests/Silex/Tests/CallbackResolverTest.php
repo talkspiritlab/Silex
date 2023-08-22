@@ -20,7 +20,7 @@ class CallbackResolverTest extends Testcase
     private $app;
     private $resolver;
 
-    public function setup()
+    public function setup(): void
     {
         $this->app = new Container();
         $this->resolver = new CallbackResolver($this->app);
@@ -28,8 +28,11 @@ class CallbackResolverTest extends Testcase
 
     public function testShouldResolveCallback()
     {
-        $callable = function () {};
-        $this->app['some_service'] = function () { return new \ArrayObject(); };
+        $callable = function () {
+        };
+        $this->app['some_service'] = function () {
+            return new \ArrayObject();
+        };
         $this->app['callable_service'] = function () use ($callable) {
             return $callable;
         };
@@ -67,8 +70,12 @@ class CallbackResolverTest extends Testcase
      */
     public function testShouldThrowAnExceptionIfServiceIsNotCallable($name)
     {
-        $this->app['non_callable_obj'] = function () { return new \stdClass(); };
-        $this->app['non_callable'] = function () { return []; };
+        $this->app['non_callable_obj'] = function () {
+            return new \stdClass();
+        };
+        $this->app['non_callable'] = function () {
+            return [];
+        };
         $this->resolver->convertCallback($name);
     }
 

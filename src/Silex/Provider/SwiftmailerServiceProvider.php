@@ -67,7 +67,9 @@ class SwiftmailerServiceProvider implements ServiceProviderInterface, EventListe
 
             $transport->setHost($options['host']);
             $transport->setPort($options['port']);
-            $transport->setEncryption($options['encryption']);
+            if($options['encryption']!==null) {
+                $transport->setEncryption($options['encryption']);
+            }
             $transport->setUsername($options['username']);
             $transport->setPassword($options['password']);
             $transport->setAuthMode($options['auth_mode']);
