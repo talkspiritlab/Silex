@@ -1,5 +1,7 @@
 ---
-version: 2.0
+version: 2.1
+
+setup: true
 
 defaults: &defaults
   working_directory: ~/silex
@@ -21,7 +23,7 @@ jobs:
             composer update --no-suggest
             ./vendor/bin/simple-phpunit install
       - run:
-          name: Execute tests
+          name: Execute unit tests
           command: |
             ./vendor/bin/simple-phpunit
 
