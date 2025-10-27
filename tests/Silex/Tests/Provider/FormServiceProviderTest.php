@@ -20,6 +20,7 @@ use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\FormTypeGuesserChain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -83,12 +84,11 @@ class FormServiceProviderTest extends TestCase
         $this->assertInstanceOf('Symfony\Component\Form\Form', $form);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid form type. The silex service "dummy" does not exist.
-     */
     public function testNonExistentTypeService()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Invalid form type. The silex service \"dummy\" does not exist.");
+
         $app = new Application();
 
         $app->register(new FormServiceProvider());
@@ -147,12 +147,11 @@ class FormServiceProviderTest extends TestCase
         $this->assertInstanceOf('Symfony\Component\Form\Form', $form);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid form type extension. The silex service "dummy.form.type.extension" does not exist.
-     */
     public function testNonExistentTypeExtensionService()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Invalid form type extension. The silex service \"dummy.form.type.extension\" does not exist.");
+
         $app = new Application();
 
         $app->register(new FormServiceProvider());
@@ -202,12 +201,11 @@ class FormServiceProviderTest extends TestCase
         $this->assertInstanceOf('Symfony\Component\Form\FormFactory', $app['form.factory']);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Invalid form type guesser. The silex service "dummy.form.type.guesser" does not exist.
-     */
     public function testNonExistentTypeGuesserService()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Invalid form type guesser. The silex service \"dummy.form.type.guesser\" does not exist.");
+
         $app = new Application();
 
         $app->register(new FormServiceProvider());
@@ -250,10 +248,10 @@ class FormServiceProviderTest extends TestCase
         $this->assertFalse($form->isValid());
         $r = new \ReflectionMethod($form, 'getErrors');
         if (!$r->getNumberOfParameters()) {
-            $this->assertContains('ERROR: German translation', $form->getErrorsAsString());
+            $this->assertStringContainsString('ERROR: German translation', $form->getErrorsAsString());
         } else {
             // as of 2.5
-            $this->assertContains('ERROR: German translation', (string) $form->getErrors(true, false));
+            $this->assertStringContainsString('ERROR: German translation', (string) $form->getErrors(true, false));
         }
     }
 

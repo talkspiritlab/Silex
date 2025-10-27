@@ -28,11 +28,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SecurityServiceProviderTest extends WebTestCase
 {
-    /**
-     * @expectedException \LogicException
-     */
     public function testWrongAuthenticationType()
     {
+        $this->expectException(\LogicException::class);
+
         $app = new Application();
         $app->register(new SecurityServiceProvider(), [
             'security.firewalls' => [
@@ -56,7 +55,7 @@ class SecurityServiceProviderTest extends WebTestCase
         $this->assertEquals('ANONYMOUS', $client->getResponse()->getContent());
 
         $client->request('post', '/login_check', ['_username' => 'fabien', '_password' => 'bar']);
-        $this->assertContains('Bad credentials', $app['security.last_error']($client->getRequest()));
+        $this->assertStringContainsString('Bad credentials', $app['security.last_error']($client->getRequest()));
         // hack to re-close the session as the previous assertions re-opens it
         $client->getRequest()->getSession()->save();
 
@@ -133,7 +132,7 @@ class SecurityServiceProviderTest extends WebTestCase
 
         $client->request('get', '/', [], [], ['HTTP_X_AUTH_TOKEN' => 'lili:not the secret']);
         $this->assertEquals(403, $client->getResponse()->getStatusCode(), 'User not found');
-        $this->assertEquals('{"message":"Username could not be found."}', $client->getResponse()->getContent());
+        $this->assertEquals('{"message":"Invalid credentials."}', $client->getResponse()->getContent());
 
         $client->request('get', '/', [], [], ['HTTP_X_AUTH_TOKEN' => 'victoria:not the secret']);
         $this->assertEquals(403, $client->getResponse()->getStatusCode(), 'Invalid credentials');
